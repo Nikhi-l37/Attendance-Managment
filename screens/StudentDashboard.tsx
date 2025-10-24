@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState, useEffect } from 'react';
 import { type Student } from '../types';
 import { useAuth } from '../hooks/useAuth';
@@ -9,22 +8,25 @@ import { UsersIcon, BookOpenIcon, ClipboardListIcon } from '../components/icons'
 import { api } from '../services/api';
 
 export const StudentDashboard: React.FC = () => {
-    const { user } = useAuth();
-    const [studentData, setStudentData] = useState<Student | null>(user as Student);
+    const { user, logout } = useAuth();
+    const [studentData, setStudentData] = useState<Student | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
     const [activeView, setActiveView] = React.useState('dashboard');
 
     useEffect(() => {
         const fetchStudentData = async () => {
-            if (user) {
+            if (user?.id) {
+                setIsLoading(true);
                 const data = await api.getStudentById(user.id);
                 setStudentData(data);
+                setIsLoading(false);
             }
         };
         fetchStudentData();
     }, [user]);
 
     const attendanceSummary = useMemo(() => {
-        if (!studentData || !studentData.attendance) return { present: 0, total: 0, percentage: '0' };
+        if (!studentData?.attendance) return { present: 0, total: 0, percentage: '0' };
         const presentDays = studentData.attendance.filter(a => a.status === 'Present' || a.status === 'Late').length;
         const totalDays = studentData.attendance.length;
         const percentage = totalDays > 0 ? ((presentDays / totalDays) * 100).toFixed(1) : '0';
@@ -32,13 +34,30 @@ export const StudentDashboard: React.FC = () => {
     }, [studentData]);
 
     const averageMarks = useMemo(() => {
-        if (!studentData || !studentData.marks || studentData.marks.length === 0) return '0';
+        if (!studentData?.marks || studentData.marks.length === 0) return '0';
         const total = studentData.marks.reduce((acc, curr) => acc + curr.marks, 0);
         return (total / studentData.marks.length).toFixed(1);
     }, [studentData]);
 
-    if (!studentData) {
+    if (isLoading) {
         return <div className="min-h-screen flex items-center justify-center">Loading student data...</div>;
+    }
+
+    if (!studentData) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-slate-100">
+                <div className="text-center bg-white p-8 rounded-lg shadow-md">
+                    <h2 className="text-2xl font-bold text-red-600 mb-4">Error</h2>
+                    <p className="text-slate-600 mb-6">Could not load your student data. Your account may have been removed by an administrator.</p>
+                    <button 
+                        onClick={logout} 
+                        className="bg-indigo-600 text-white py-2 px-6 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+                    >
+                        Return to Login
+                    </button>
+                </div>
+            </div>
+        );
     }
 
     return (
