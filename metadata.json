@@ -1,0 +1,5 @@
+{
+  "name": "Student Attendance and Marks Management System",
+  "description": "A full-stack web application engineered to digitize and centralize academic record-keeping in educational institutions. This system provides role-based access for Administrators, Teachers, and Students to manage attendance, marks, and reports efficiently.",
+  "requestFramePermissions": []
+}
