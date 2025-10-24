@@ -7,6 +7,7 @@ interface AuthContextType {
   user: AppUser | null;
   loading: boolean;
   login: (email: string, role: Role) => Promise<void>;
+  signup: (name: string, email: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -19,21 +20,40 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error("Failed to parse user from localStorage", error);
+        localStorage.removeItem('user');
+      }
     }
     setLoading(false);
   }, []);
 
   const login = async (email: string, role: Role) => {
     setLoading(true);
-    const loggedInUser = await api.login(email, role);
-    if (loggedInUser) {
-      setUser(loggedInUser);
-      localStorage.setItem('user', JSON.stringify(loggedInUser));
-    } else {
-        throw new Error("Invalid credentials or role.");
+    try {
+      const loggedInUser = await api.login(email, role);
+      if (loggedInUser) {
+        setUser(loggedInUser);
+        localStorage.setItem('user', JSON.stringify(loggedInUser));
+      } else {
+          throw new Error("Invalid credentials or role.");
+      }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
+  };
+  
+  const signup = async (name: string, email: string) => {
+    setLoading(true);
+    try {
+      const newUser = await api.adminSignup(name, email);
+      setUser(newUser);
+      localStorage.setItem('user', JSON.stringify(newUser));
+    } finally {
+      setLoading(false);
+    }
   };
 
   const logout = () => {
@@ -42,7 +62,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );

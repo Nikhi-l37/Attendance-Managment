@@ -1,30 +1,45 @@
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { type Student } from '../types';
 import { useAuth } from '../hooks/useAuth';
 import { Layout } from '../components/Layout';
 import { DashboardCard } from '../components/DashboardCard';
 import { StudentChart } from '../components/StudentChart';
 import { UsersIcon, BookOpenIcon, ClipboardListIcon } from '../components/icons';
+import { api } from '../services/api';
 
 export const StudentDashboard: React.FC = () => {
     const { user } = useAuth();
-    const student = user as Student;
+    const [studentData, setStudentData] = useState<Student | null>(user as Student);
     const [activeView, setActiveView] = React.useState('dashboard');
 
+    useEffect(() => {
+        const fetchStudentData = async () => {
+            if (user) {
+                const data = await api.getStudentById(user.id);
+                setStudentData(data);
+            }
+        };
+        fetchStudentData();
+    }, [user]);
+
     const attendanceSummary = useMemo(() => {
-        if (!student || !student.attendance) return { present: 0, total: 0, percentage: '0' };
-        const presentDays = student.attendance.filter(a => a.status === 'Present').length;
-        const totalDays = student.attendance.length;
+        if (!studentData || !studentData.attendance) return { present: 0, total: 0, percentage: '0' };
+        const presentDays = studentData.attendance.filter(a => a.status === 'Present' || a.status === 'Late').length;
+        const totalDays = studentData.attendance.length;
         const percentage = totalDays > 0 ? ((presentDays / totalDays) * 100).toFixed(1) : '0';
         return { present: presentDays, total: totalDays, percentage };
-    }, [student]);
+    }, [studentData]);
 
     const averageMarks = useMemo(() => {
-        if (!student || !student.marks || student.marks.length === 0) return '0';
-        const total = student.marks.reduce((acc, curr) => acc + curr.marks, 0);
-        return (total / student.marks.length).toFixed(1);
-    }, [student]);
+        if (!studentData || !studentData.marks || studentData.marks.length === 0) return '0';
+        const total = studentData.marks.reduce((acc, curr) => acc + curr.marks, 0);
+        return (total / studentData.marks.length).toFixed(1);
+    }, [studentData]);
+
+    if (!studentData) {
+        return <div className="min-h-screen flex items-center justify-center">Loading student data...</div>;
+    }
 
     return (
         <Layout activeView={activeView} setActiveView={setActiveView}>
@@ -44,32 +59,36 @@ export const StudentDashboard: React.FC = () => {
                 />
                 <DashboardCard 
                     title="Class" 
-                    value={student.class} 
+                    value={studentData.class} 
                     icon={<UsersIcon className="w-8 h-8 text-white"/>} 
                     color="bg-purple-500" 
                 />
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <StudentChart marks={student.marks} />
+                <StudentChart marks={studentData.marks} />
 
                 <div className="bg-white p-6 rounded-lg shadow-md">
                     <h3 className="text-lg font-semibold text-gray-700 mb-4">Attendance Details</h3>
-                    <div className="overflow-x-auto">
+                    <div className="overflow-x-auto max-h-80">
                         <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
+                            <thead className="bg-gray-50 sticky top-0">
                                 <tr>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Month</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {student.attendance.map(record => (
+                                {studentData.attendance.length > 0 ? studentData.attendance.map(record => (
                                     <tr key={record.month}>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{record.month}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{record.status}</td>
                                     </tr>
-                                ))}
+                                )) : (
+                                    <tr>
+                                        <td colSpan={2} className="text-center py-4 text-gray-500">No attendance records found.</td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     </div>
