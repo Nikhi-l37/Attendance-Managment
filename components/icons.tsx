@@ -62,5 +62,4 @@ export const XIcon = ({ className = 'w-6 h-6' }: { className?: string }) => (
 );
 
 
-// Export more icons as needed
   
