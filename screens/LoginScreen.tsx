@@ -51,7 +51,7 @@ export const LoginScreen: React.FC = () => {
           </p>
         </div>
         
-        {error && <p className="bg-red-100 border border-red-200 text-red-700 p-3 rounded-lg mb-4 text-center animate-shake">{error}</p>}
+        {error && <p className="bg-red-100 border border-red-200 text-red-700 p-3 rounded-lg mb-4 text-center">{error}</p>}
         
         <form onSubmit={handleSubmit}>
           {isSignup && (

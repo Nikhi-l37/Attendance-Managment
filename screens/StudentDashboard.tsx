@@ -103,7 +103,7 @@ export const StudentDashboard: React.FC = () => {
                     <h3 className="text-xl font-semibold text-gray-700 mb-4 flex items-center">
                         <span className="mr-2">📋</span> Attendance Details
                     </h3>
-                    <div className="overflow-x-auto max-h-80 custom-scrollbar">
+                    <div className="overflow-x-auto max-h-80 overflow-y-auto scrollbar-thin">
                         <table className="min-w-full divide-y divide-gray-200">
                             <thead className="bg-gradient-to-r from-indigo-50 to-purple-50 sticky top-0">
                                 <tr>
