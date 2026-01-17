@@ -24,11 +24,13 @@ const processData = (marks: MarkRecord[]) => {
 
 export const StudentChart: React.FC<StudentChartProps> = ({ marks }) => {
   const { data, subjects } = processData(marks);
-  const colors = ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#0088FE', '#00C49F'];
+  const colors = ['#6366f1', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#06b6d4'];
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md h-96">
-        <h3 className="text-lg font-semibold text-gray-700 mb-4">Monthly Performance</h3>
+    <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 h-96">
+        <h3 className="text-xl font-semibold text-gray-700 mb-4 flex items-center">
+            <span className="mr-2">📈</span> Monthly Performance
+        </h3>
         <ResponsiveContainer width="100%" height="100%">
             <LineChart
             data={data}
@@ -39,17 +41,16 @@ export const StudentChart: React.FC<StudentChartProps> = ({ marks }) => {
                 bottom: 25,
             }}
             >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
-            <YAxis domain={[0, 100]} />
-            <Tooltip />
-            <Legend />
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis dataKey="month" stroke="#64748b" />
+            <YAxis domain={[0, 100]} stroke="#64748b" />
+            <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+            <Legend wrapperStyle={{ paddingTop: '10px' }} />
             {subjects.map((subject, index) => (
-                <Line key={subject} type="monotone" dataKey={subject} stroke={colors[index % colors.length]} activeDot={{ r: 8 }} />
+                <Line key={subject} type="monotone" dataKey={subject} stroke={colors[index % colors.length]} strokeWidth={2} activeDot={{ r: 6, strokeWidth: 2 }} />
             ))}
             </LineChart>
         </ResponsiveContainer>
     </div>
   );
 };
-// these is nikhil i am changng  or adding this line in these code.
