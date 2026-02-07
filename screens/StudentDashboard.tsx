@@ -74,32 +74,32 @@ export const StudentDashboard: React.FC = () => {
 
     return (
         <Layout activeView={activeView} setActiveView={setActiveView}>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6">Student Dashboard</h1>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6 animate-slideInUp">Student Dashboard</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                 <DashboardCard 
+                 <div className="stagger-1"><DashboardCard 
                     title="Overall Attendance" 
                     value={`${attendanceSummary.percentage}%`} 
                     icon={<ClipboardListIcon className="w-8 h-8 text-white"/>} 
                     color="bg-gradient-to-r from-green-500 to-green-600" 
-                />
-                 <DashboardCard 
+                /></div>
+                 <div className="stagger-2"><DashboardCard 
                     title="Average Marks" 
                     value={averageMarks} 
                     icon={<BookOpenIcon className="w-8 h-8 text-white"/>} 
                     color="bg-gradient-to-r from-blue-500 to-blue-600" 
-                />
-                <DashboardCard 
+                /></div>
+                <div className="stagger-3"><DashboardCard 
                     title="Class" 
                     value={studentData.class} 
                     icon={<UsersIcon className="w-8 h-8 text-white"/>} 
                     color="bg-gradient-to-r from-purple-500 to-pink-500" 
-                />
+                /></div>
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <StudentChart marks={studentData.marks} />
+                <div className="animate-slideInLeft"><StudentChart marks={studentData.marks} /></div>
 
-                <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 animate-slideInRight hover-lift">
                     <h3 className="text-xl font-semibold text-gray-700 mb-4 flex items-center">
                         <span className="mr-2">📋</span> Attendance Details
                     </h3>
@@ -113,7 +113,7 @@ export const StudentDashboard: React.FC = () => {
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
                                 {studentData.attendance.length > 0 ? studentData.attendance.map(record => (
-                                    <tr key={record.month} className="hover:bg-indigo-50 transition-colors duration-150">
+                                    <tr key={record.month} className="hover:bg-indigo-50 transition-all duration-300 transform hover:scale-[1.01]">
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{record.month}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                                             <span className={`px-3 py-1 rounded-full text-xs font-medium ${

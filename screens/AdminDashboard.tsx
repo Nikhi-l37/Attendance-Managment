@@ -15,14 +15,14 @@ const AdminDashboardHome = ({ students, teachers }: { students: Student[], teach
     ];
     return (
         <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6">Admin Dashboard</h1>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6 animate-slideInUp">Admin Dashboard</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                <DashboardCard title="Total Students" value={students.length.toString()} icon={<UsersIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-blue-500 to-blue-600" />
-                <DashboardCard title="Total Teachers" value={teachers.length.toString()} icon={<UsersIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-green-500 to-green-600" />
-                <DashboardCard title="Overall Attendance" value="94%" icon={<ChartBarIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-yellow-500 to-orange-500" />
-                <DashboardCard title="Classes" value={[...new Set(students.map(s => s.class))].length.toString()} icon={<UsersIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-purple-500 to-pink-500" />
+                <div className="stagger-1"><DashboardCard title="Total Students" value={students.length.toString()} icon={<UsersIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-blue-500 to-blue-600" /></div>
+                <div className="stagger-2"><DashboardCard title="Total Teachers" value={teachers.length.toString()} icon={<UsersIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-green-500 to-green-600" /></div>
+                <div className="stagger-3"><DashboardCard title="Overall Attendance" value="94%" icon={<ChartBarIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-yellow-500 to-orange-500" /></div>
+                <div className="stagger-4"><DashboardCard title="Classes" value={[...new Set(students.map(s => s.class))].length.toString()} icon={<UsersIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-purple-500 to-pink-500" /></div>
             </div>
-             <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 h-96">
+             <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 h-96 animate-slideInUp hover-lift">
                 <h3 className="text-xl font-semibold text-gray-700 mb-4 flex items-center">
                     <span className="mr-2">📊</span> Class Overview
                 </h3>
@@ -89,13 +89,13 @@ const StudentManagement = () => {
 
     return (
         <div>
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-6 animate-slideInUp">
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Student Management</h1>
-                <button onClick={() => setShowModal(true)} className="flex items-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-6 rounded-lg hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-medium">
+                <button onClick={() => setShowModal(true)} className="flex items-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-6 rounded-lg hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 font-medium active:scale-95">
                     <PlusIcon /> <span className="ml-2">Add Student</span>
                 </button>
             </div>
-            <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+            <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 animate-slideInUp">
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
                         {/* Table head */}
@@ -117,7 +117,7 @@ const StudentManagement = () => {
                                 </div>
                             </td></tr>) : 
                             students.map(student => (
-                                <tr key={student.id} className="hover:bg-indigo-50 transition-colors duration-150">
+                                <tr key={student.id} className="hover:bg-indigo-50 transition-all duration-300 transform hover:scale-[1.01]">
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">{student.name}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{student.studentId}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
@@ -125,7 +125,7 @@ const StudentManagement = () => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{student.email}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button onClick={() => handleDeleteStudent(student.id)} className="text-red-600 hover:text-red-900 hover:bg-red-50 p-2 rounded-lg transition-all duration-200">
+                                        <button onClick={() => handleDeleteStudent(student.id)} className="text-red-600 hover:text-red-900 hover:bg-red-50 p-2 rounded-lg transition-all duration-300 transform hover:scale-110 active:scale-95">
                                             <TrashIcon />
                                         </button>
                                     </td>
@@ -147,11 +147,11 @@ const StudentManagement = () => {
                         </div>
                         <form onSubmit={handleAddStudent}>
                             {/* Form fields */}
-                            <input name="name" value={newStudent.name} onChange={handleInputChange} placeholder="Full Name" className="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200" required />
-                            <input name="email" type="email" value={newStudent.email} onChange={handleInputChange} placeholder="Email" className="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200" required />
-                            <input name="studentId" value={newStudent.studentId} onChange={handleInputChange} placeholder="Student ID" className="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200" required />
-                            <input name="class" value={newStudent.class} onChange={handleInputChange} placeholder="Class (e.g., 10A)" className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200" required />
-                            <button type="submit" className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-medium">Add Student</button>
+                            <input name="name" value={newStudent.name} onChange={handleInputChange} placeholder="Full Name" className="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 hover:border-indigo-400" required />
+                            <input name="email" type="email" value={newStudent.email} onChange={handleInputChange} placeholder="Email" className="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 hover:border-indigo-400" required />
+                            <input name="studentId" value={newStudent.studentId} onChange={handleInputChange} placeholder="Student ID" className="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 hover:border-indigo-400" required />
+                            <input name="class" value={newStudent.class} onChange={handleInputChange} placeholder="Class (e.g., 10A)" className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 hover:border-indigo-400" required />
+                            <button type="submit" className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 font-medium active:scale-95">Add Student</button>
                         </form>
                     </div>
                 </div>

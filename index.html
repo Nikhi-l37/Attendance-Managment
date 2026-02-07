@@ -7,6 +7,166 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Attendance and Marks Management System</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      @keyframes scaleIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      
+      @keyframes bounce-in {
+        0% {
+          transform: scale(0.3);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        70% {
+          transform: scale(0.9);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      
+      @keyframes pulse-glow {
+        0%, 100% {
+          box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+        50% {
+          box-shadow: 0 0 40px rgba(139, 92, 246, 0.6);
+        }
+      }
+      
+      @keyframes shimmer {
+        0% {
+          background-position: -1000px 0;
+        }
+        100% {
+          background-position: 1000px 0;
+        }
+      }
+      
+      .animate-fadeIn {
+        animation: fadeIn 0.6s ease-out;
+      }
+      
+      .animate-slideInUp {
+        animation: slideInUp 0.6s ease-out;
+      }
+      
+      .animate-slideInLeft {
+        animation: slideInLeft 0.6s ease-out;
+      }
+      
+      .animate-slideInRight {
+        animation: slideInRight 0.6s ease-out;
+      }
+      
+      .animate-scaleIn {
+        animation: scaleIn 0.5s ease-out;
+      }
+      
+      .animate-bounce-in {
+        animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      }
+      
+      .animate-pulse-glow {
+        animation: pulse-glow 2s infinite;
+      }
+      
+      .animate-shimmer {
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+        background-size: 1000px 100%;
+        animation: shimmer 2s infinite;
+      }
+      
+      .stagger-1 { animation-delay: 0.1s; }
+      .stagger-2 { animation-delay: 0.2s; }
+      .stagger-3 { animation-delay: 0.3s; }
+      .stagger-4 { animation-delay: 0.4s; }
+      
+      * {
+        scroll-behavior: smooth;
+      }
+      
+      .hover-lift {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      .hover-lift:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+      }
+      
+      .gradient-border {
+        position: relative;
+        background: white;
+      }
+      
+      .gradient-border::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 2px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      
+      .gradient-border:hover::before {
+        opacity: 1;
+      }
+    </style>
   <script type="importmap">
 {
   "imports": {

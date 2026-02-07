@@ -22,11 +22,11 @@ const TeacherDashboardHome: React.FC<{ teacher: Teacher }> = ({ teacher }) => {
 
     return (
     <div>
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6">Teacher Dashboard</h1>
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6 animate-slideInUp">Teacher Dashboard</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <DashboardCard title="Assigned Classes" value={teacher.classes.join(', ')} icon={<UsersIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-blue-500 to-blue-600" />
-            <DashboardCard title="Department" value={teacher.department} icon={<BookOpenIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-green-500 to-green-600" />
-            <DashboardCard title="Total Students" value={studentCount.toString()} icon={<UsersIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-purple-500 to-pink-500" />
+            <div className="stagger-1"><DashboardCard title="Assigned Classes" value={teacher.classes.join(', ')} icon={<UsersIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-blue-500 to-blue-600" /></div>
+            <div className="stagger-2"><DashboardCard title="Department" value={teacher.department} icon={<BookOpenIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-green-500 to-green-600" /></div>
+            <div className="stagger-3"><DashboardCard title="Total Students" value={studentCount.toString()} icon={<UsersIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-purple-500 to-pink-500" /></div>
         </div>
     </div>
     )
@@ -58,8 +58,8 @@ const AttendanceManagement: React.FC<{ teacher: Teacher }> = ({ teacher }) => {
 
     return (
         <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6">Attendance Management</h1>
-            <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6 animate-slideInUp">Attendance Management</h1>
+            <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-slideInLeft">
                 <select value={selectedClass} onChange={e => setSelectedClass(e.target.value)} className="p-3 border border-gray-300 rounded-lg bg-white shadow-sm hover:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
                     {teacher.classes.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
@@ -67,16 +67,16 @@ const AttendanceManagement: React.FC<{ teacher: Teacher }> = ({ teacher }) => {
                     {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'].map(m => <option key={m} value={m}>{m}</option>)}
                 </select>
             </div>
-            <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 space-y-2">
+            <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 space-y-2 animate-slideInUp">
                 {students.map(student => {
                     const currentStatus = student.attendance.find(a => a.month === month)?.status;
                     return (
-                        <div key={student.id} className="flex flex-col sm:flex-row justify-between sm:items-center p-4 border border-gray-100 rounded-lg hover:bg-indigo-50 transition-all duration-200">
+                        <div key={student.id} className="flex flex-col sm:flex-row justify-between sm:items-center p-4 border border-gray-100 rounded-lg hover:bg-indigo-50 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-md">
                             <span className="font-semibold text-gray-800 mb-2 sm:mb-0">{student.name}</span>
                             <div className="flex gap-2">
-                                <button onClick={() => handleStatusChange(student.id, 'Present')} className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${currentStatus === 'Present' ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg scale-105' : 'bg-green-100 text-green-800 hover:bg-green-200'}`}>✓ Present</button>
-                                <button onClick={() => handleStatusChange(student.id, 'Absent')} className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${currentStatus === 'Absent' ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg scale-105' : 'bg-red-100 text-red-800 hover:bg-red-200'}`}>✗ Absent</button>
-                                <button onClick={() => handleStatusChange(student.id, 'Late')} className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${currentStatus === 'Late' ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg scale-105' : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'}`}>⏰ Late</button>
+                                <button onClick={() => handleStatusChange(student.id, 'Present')} className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 ${currentStatus === 'Present' ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg scale-105' : 'bg-green-100 text-green-800 hover:bg-green-200'}`}>✓ Present</button>
+                                <button onClick={() => handleStatusChange(student.id, 'Absent')} className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 ${currentStatus === 'Absent' ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg scale-105' : 'bg-red-100 text-red-800 hover:bg-red-200'}`}>✗ Absent</button>
+                                <button onClick={() => handleStatusChange(student.id, 'Late')} className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 ${currentStatus === 'Late' ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg scale-105' : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'}`}>⏰ Late</button>
                             </div>
                         </div>
                     );
@@ -125,8 +125,8 @@ const MarksManagement: React.FC<{ teacher: Teacher }> = ({ teacher }) => {
 
     return (
         <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6">Marks Management</h1>
-            <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6 animate-slideInUp">Marks Management</h1>
+            <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-slideInLeft">
                 <select value={selectedClass} onChange={e => setSelectedClass(e.target.value)} className="p-3 border border-gray-300 rounded-lg bg-white shadow-sm hover:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
                     {teacher.classes.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
@@ -135,9 +135,9 @@ const MarksManagement: React.FC<{ teacher: Teacher }> = ({ teacher }) => {
                 </select>
                 <input type="text" value={subject} onChange={e => setSubject(e.target.value)} placeholder="Subject" className="p-3 border border-gray-300 rounded-lg shadow-sm hover:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"/>
             </div>
-            <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 space-y-2">
+            <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 space-y-2 animate-slideInUp">
                 {students.map(student => (
-                    <div key={student.id} className="flex flex-col sm:flex-row justify-between sm:items-center p-4 border border-gray-100 rounded-lg hover:bg-indigo-50 transition-all duration-200">
+                    <div key={student.id} className="flex flex-col sm:flex-row justify-between sm:items-center p-4 border border-gray-100 rounded-lg hover:bg-indigo-50 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-md">
                         <span className="font-semibold text-gray-800 mb-2 sm:mb-0">{student.name}</span>
                         <div className="flex items-center gap-3">
                             <input 
@@ -148,7 +148,7 @@ const MarksManagement: React.FC<{ teacher: Teacher }> = ({ teacher }) => {
                                 className="w-28 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 shadow-sm" 
                                 placeholder="Marks" 
                             />
-                            <button onClick={() => handleSaveMarks(student.id)} className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-medium text-sm">Save</button>
+                            <button onClick={() => handleSaveMarks(student.id)} className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 font-medium text-sm active:scale-95">Save</button>
                         </div>
                     </div>
                 ))}
