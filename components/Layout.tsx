@@ -14,7 +14,7 @@ const NavLink: React.FC<{ icon: React.ReactNode; label: string; active?: boolean
         onClick={(e) => { e.preventDefault(); onClick(); }}
         className={`flex items-center px-4 py-3 text-gray-200 hover:bg-slate-700/80 rounded-lg transition-all duration-300 transform hover:translate-x-2 hover:shadow-lg ${active ? 'bg-gradient-to-r from-indigo-600 to-purple-600 shadow-xl scale-105 translate-x-1' : ''}`}
     >
-        <span className={`transition-transform duration-300 ${active ? 'scale-125 rotate-12' : ''}`}>{icon}</span>
+        <span className={`transition-transform duration-300 ${active ? 'scale-125' : ''}`}>{icon}</span>
         <span className="ml-3 font-medium">{label}</span>
     </a>
 );
