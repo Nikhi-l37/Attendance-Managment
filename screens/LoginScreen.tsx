@@ -35,10 +35,10 @@ export const LoginScreen: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 p-4">
-      <div className="max-w-md w-full bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-white/20 transform transition-all duration-300 hover:scale-[1.02]">
-        <div className="text-center mb-8">
-          <div className="inline-block p-3 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full mb-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 p-4 animate-fadeIn">
+      <div className="max-w-md w-full bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-white/20 transform transition-all duration-300 hover:scale-[1.02] animate-scaleIn hover-lift">
+        <div className="text-center mb-8 animate-slideInUp">
+          <div className="inline-block p-3 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full mb-4 animate-bounce-in">
             <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
@@ -103,7 +103,7 @@ export const LoginScreen: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-[1.02] font-medium shadow-lg hover:shadow-xl"
+            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 font-medium shadow-lg hover:shadow-2xl active:scale-95"
           >
             {loading ? 'Processing...' : (isSignup ? 'Sign Up' : 'Sign In')}
           </button>
