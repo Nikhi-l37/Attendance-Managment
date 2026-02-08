@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { useAuth } from './hooks/useAuth';
 import { Role } from './types';
 import { LoginScreen } from './screens/LoginScreen';
@@ -41,9 +42,11 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
         <AppContent />
-    </AuthProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 };
 
