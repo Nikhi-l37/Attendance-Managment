@@ -15,15 +15,15 @@ const AdminDashboardHome = ({ students, teachers }: { students: Student[], teach
     ];
     return (
         <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6">Admin Dashboard</h1>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6 animate-slideInUp">Admin Dashboard</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                <DashboardCard title="Total Students" value={students.length.toString()} icon={<UsersIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-blue-500 to-blue-600" />
-                <DashboardCard title="Total Teachers" value={teachers.length.toString()} icon={<UsersIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-green-500 to-green-600" />
-                <DashboardCard title="Overall Attendance" value="94%" icon={<ChartBarIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-yellow-500 to-orange-500" />
-                <DashboardCard title="Classes" value={[...new Set(students.map(s => s.class))].length.toString()} icon={<UsersIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-purple-500 to-pink-500" />
+                <div className="stagger-1"><DashboardCard title="Total Students" value={students.length.toString()} icon={<UsersIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-blue-500 to-blue-600" /></div>
+                <div className="stagger-2"><DashboardCard title="Total Teachers" value={teachers.length.toString()} icon={<UsersIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-green-500 to-green-600" /></div>
+                <div className="stagger-3"><DashboardCard title="Overall Attendance" value="94%" icon={<ChartBarIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-yellow-500 to-orange-500" /></div>
+                <div className="stagger-4"><DashboardCard title="Classes" value={[...new Set(students.map(s => s.class))].length.toString()} icon={<UsersIcon className="w-8 h-8 text-white"/>} color="bg-gradient-to-r from-purple-500 to-pink-500" /></div>
             </div>
-             <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 h-96">
-                <h3 className="text-xl font-semibold text-gray-700 mb-4 flex items-center">
+             <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg border border-gray-100 dark:border-slate-700 h-96 animate-slideInUp hover-lift">
+                <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center">
                     <span className="mr-2">📊</span> Class Overview
                 </h3>
                 <ResponsiveContainer width="100%" height="100%">
@@ -89,43 +89,43 @@ const StudentManagement = () => {
 
     return (
         <div>
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-6 animate-slideInUp">
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Student Management</h1>
-                <button onClick={() => setShowModal(true)} className="flex items-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-6 rounded-lg hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-medium">
+                <button onClick={() => setShowModal(true)} className="flex items-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-6 rounded-lg hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 font-medium active:scale-95">
                     <PlusIcon /> <span className="ml-2">Add Student</span>
                 </button>
             </div>
-            <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg border border-gray-100 dark:border-slate-700 animate-slideInUp">
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
                         {/* Table head */}
-                        <thead className="bg-gradient-to-r from-indigo-50 to-purple-50">
+                        <thead className="bg-gradient-to-r from-indigo-50 dark:from-slate-700 to-purple-50 dark:to-slate-700">
                             <tr>
-                                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Name</th>
-                                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Student ID</th>
-                                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Class</th>
-                                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Email</th>
-                                <th className="px-6 py-4 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">Actions</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Name</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Student ID</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Class</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Email</th>
+                                <th className="px-6 py-4 text-right text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
                         {/* Table body */}
-                        <tbody className="bg-white divide-y divide-gray-200">
-                            {isLoading ? (<tr><td colSpan={5} className="text-center py-8 text-gray-500">
+                        <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700">
+                            {isLoading ? (<tr><td colSpan={5} className="text-center py-8 text-gray-500 dark:text-gray-400">
                                 <div className="flex justify-center items-center">
                                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
                                     <span className="ml-3">Loading...</span>
                                 </div>
                             </td></tr>) : 
                             students.map(student => (
-                                <tr key={student.id} className="hover:bg-indigo-50 transition-colors duration-150">
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">{student.name}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{student.studentId}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                        <span className="px-2 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-medium">{student.class}</span>
+                                <tr key={student.id} className="hover:bg-indigo-50 dark:hover:bg-slate-700/50 transition-all duration-300 transform hover:scale-[1.01]">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-white">{student.name}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">{student.studentId}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                                        <span className="px-2 py-1 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-800 dark:text-indigo-300 rounded-full text-xs font-medium">{student.class}</span>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{student.email}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">{student.email}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button onClick={() => handleDeleteStudent(student.id)} className="text-red-600 hover:text-red-900 hover:bg-red-50 p-2 rounded-lg transition-all duration-200">
+                                        <button onClick={() => handleDeleteStudent(student.id)} className="text-red-600 hover:text-red-900 hover:bg-red-50 p-2 rounded-lg transition-all duration-300 transform hover:scale-110 active:scale-95">
                                             <TrashIcon />
                                         </button>
                                     </td>
@@ -138,20 +138,20 @@ const StudentManagement = () => {
             {/* Modal */}
             {showModal && (
                  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 backdrop-blur-sm">
-                    <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-100 border border-gray-100">
+                    <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-100 border border-gray-100 dark:border-slate-700">
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Add New Student</h2>
-                            <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-lg transition-all duration-200">
+                            <button onClick={() => setShowModal(false)} className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700 p-2 rounded-lg transition-all duration-200">
                                 <XIcon />
                             </button>
                         </div>
                         <form onSubmit={handleAddStudent}>
                             {/* Form fields */}
-                            <input name="name" value={newStudent.name} onChange={handleInputChange} placeholder="Full Name" className="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200" required />
-                            <input name="email" type="email" value={newStudent.email} onChange={handleInputChange} placeholder="Email" className="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200" required />
-                            <input name="studentId" value={newStudent.studentId} onChange={handleInputChange} placeholder="Student ID" className="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200" required />
-                            <input name="class" value={newStudent.class} onChange={handleInputChange} placeholder="Class (e.g., 10A)" className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200" required />
-                            <button type="submit" className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-medium">Add Student</button>
+                            <input name="name" value={newStudent.name} onChange={handleInputChange} placeholder="Full Name" className="w-full p-3 mb-3 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 hover:border-indigo-400 dark:hover:border-indigo-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-white" required />
+                            <input name="email" type="email" value={newStudent.email} onChange={handleInputChange} placeholder="Email" className="w-full p-3 mb-3 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 hover:border-indigo-400 dark:hover:border-indigo-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-white" required />
+                            <input name="studentId" value={newStudent.studentId} onChange={handleInputChange} placeholder="Student ID" className="w-full p-3 mb-3 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 hover:border-indigo-400 dark:hover:border-indigo-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-white" required />
+                            <input name="class" value={newStudent.class} onChange={handleInputChange} placeholder="Class (e.g., 10A)" className="w-full p-3 mb-4 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 hover:border-indigo-400 dark:hover:border-indigo-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-white" required />
+                            <button type="submit" className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 font-medium active:scale-95">Add Student</button>
                         </form>
                     </div>
                 </div>
@@ -208,33 +208,33 @@ const TeacherManagement = () => {
                     <PlusIcon /> <span className="ml-2">Add Teacher</span>
                 </button>
             </div>
-            <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg border border-gray-100 dark:border-slate-700">
                  <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gradient-to-r from-indigo-50 to-purple-50">
+                    <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+                        <thead className="bg-gradient-to-r from-indigo-50 dark:from-slate-700 to-purple-50 dark:to-slate-700">
                             <tr>
-                                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Name</th>
-                                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Teacher ID</th>
-                                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Department</th>
-                                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Email</th>
-                                <th className="px-6 py-4 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">Actions</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Name</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Teacher ID</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Department</th>
+                                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Email</th>
+                                <th className="px-6 py-4 text-right text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                             {isLoading ? (<tr><td colSpan={5} className="text-center py-8 text-gray-500">
+                        <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700">
+                             {isLoading ? (<tr><td colSpan={5} className="text-center py-8 text-gray-500 dark:text-gray-400">
                                 <div className="flex justify-center items-center">
                                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
                                     <span className="ml-3">Loading...</span>
                                 </div>
                             </td></tr>) : 
                                 teachers.map(teacher => (
-                                    <tr key={teacher.id} className="hover:bg-indigo-50 transition-colors duration-150">
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">{teacher.name}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{teacher.teacherId}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                            <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">{teacher.department}</span>
+                                    <tr key={teacher.id} className="hover:bg-indigo-50 dark:hover:bg-slate-700/50 transition-colors duration-150">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-white">{teacher.name}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">{teacher.teacherId}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                                            <span className="px-2 py-1 bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300 rounded-full text-xs font-medium">{teacher.department}</span>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{teacher.email}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">{teacher.email}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <button onClick={() => handleDeleteTeacher(teacher.id)} className="text-red-600 hover:text-red-900 hover:bg-red-50 p-2 rounded-lg transition-all duration-200">
                                                 <TrashIcon />
@@ -249,19 +249,19 @@ const TeacherManagement = () => {
             {/* Modal */}
             {showModal && (
                  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 backdrop-blur-sm">
-                    <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-100 border border-gray-100">
+                    <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-100 border border-gray-100 dark:border-slate-700">
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Add New Teacher</h2>
-                            <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-lg transition-all duration-200">
+                            <button onClick={() => setShowModal(false)} className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700 p-2 rounded-lg transition-all duration-200">
                                 <XIcon />
                             </button>
                         </div>
                         <form onSubmit={handleAddTeacher}>
-                            <input name="name" value={newTeacher.name} onChange={handleInputChange} placeholder="Full Name" className="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200" required />
-                            <input name="email" type="email" value={newTeacher.email} onChange={handleInputChange} placeholder="Email" className="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200" required />
-                            <input name="teacherId" value={newTeacher.teacherId} onChange={handleInputChange} placeholder="Teacher ID" className="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200" required />
-                            <input name="department" value={newTeacher.department} onChange={handleInputChange} placeholder="Department" className="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200" required />
-                            <input name="classes" value={newTeacher.classes} onChange={handleInputChange} placeholder="Classes (comma-separated)" className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200" required />
+                            <input name="name" value={newTeacher.name} onChange={handleInputChange} placeholder="Full Name" className="w-full p-3 mb-3 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white dark:bg-slate-700 text-gray-900 dark:text-white" required />
+                            <input name="email" type="email" value={newTeacher.email} onChange={handleInputChange} placeholder="Email" className="w-full p-3 mb-3 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white dark:bg-slate-700 text-gray-900 dark:text-white" required />
+                            <input name="teacherId" value={newTeacher.teacherId} onChange={handleInputChange} placeholder="Teacher ID" className="w-full p-3 mb-3 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white dark:bg-slate-700 text-gray-900 dark:text-white" required />
+                            <input name="department" value={newTeacher.department} onChange={handleInputChange} placeholder="Department" className="w-full p-3 mb-3 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white dark:bg-slate-700 text-gray-900 dark:text-white" required />
+                            <input name="classes" value={newTeacher.classes} onChange={handleInputChange} placeholder="Classes (comma-separated)" className="w-full p-3 mb-4 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white dark:bg-slate-700 text-gray-900 dark:text-white" required />
                             <button type="submit" className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-medium">Add Teacher</button>
                         </form>
                     </div>

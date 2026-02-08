@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { useAuth } from './hooks/useAuth';
 import { Role } from './types';
 import { LoginScreen } from './screens/LoginScreen';
@@ -13,10 +14,10 @@ const AppContent: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-indigo-600 mx-auto mb-4"></div>
-                    <p className="text-xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Loading...</p>
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 animate-fadeIn">
+                <div className="text-center animate-scaleIn">
+                    <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-indigo-600 mx-auto mb-4 animate-pulse-glow"></div>
+                    <p className="text-xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent animate-pulse">Loading...</p>
                 </div>
             </div>
         );
@@ -41,9 +42,11 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
         <AppContent />
-    </AuthProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 };
 
