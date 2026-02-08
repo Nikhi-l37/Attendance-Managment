@@ -27,8 +27,8 @@ export const StudentChart: React.FC<StudentChartProps> = ({ marks }) => {
   const colors = ['#6366f1', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#06b6d4'];
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 h-96">
-        <h3 className="text-xl font-semibold text-gray-700 mb-4 flex items-center">
+    <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg border border-gray-100 dark:border-slate-700 h-96">
+        <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center">
             <span className="mr-2">📈</span> Monthly Performance
         </h3>
         <ResponsiveContainer width="100%" height="100%">
