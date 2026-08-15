@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local nested duplicate repo (do not track in parent repo)
+Attendance-Managment/
