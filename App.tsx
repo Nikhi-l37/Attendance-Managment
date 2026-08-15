@@ -4,7 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { useAuth } from './hooks/useAuth';
 import { Role } from './types';
-import { LoginScreen } from './screens/LoginScreen';
+import LoginScreen from './screens/LoginScreen';
 import { AdminDashboard } from './screens/AdminDashboard';
 import { TeacherDashboard } from './screens/TeacherDashboard';
 import { StudentDashboard } from './screens/StudentDashboard';
