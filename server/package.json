@@ -1,0 +1,17 @@
+{
+  "name": "attendance-management-server",
+  "version": "1.0.0",
+  "description": "MongoDB Atlas Backend API for Student Attendance and Marks Management System",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node seed.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5"
+  }
+}

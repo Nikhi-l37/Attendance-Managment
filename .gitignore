@@ -23,5 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 
-# Local nested duplicate repo (do not track in parent repo)
-Attendance-Managment/
+# Environment and secrets
+.env
+.env.*
+*.env
+atlas-credentials.env
+

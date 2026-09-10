@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../hooks/useTheme';
 import { Role } from '../types';
-import { DashboardIcon, UsersIcon, ChartBarIcon, LogoutIcon, BookOpenIcon, ClipboardListIcon, MoonIcon, SunIcon } from './icons';
+import { DashboardIcon, UsersIcon, ChartBarIcon, LogoutIcon, BookOpenIcon, ClipboardListIcon, MoonIcon, SunIcon, AlertTriangleIcon, DocumentTextIcon } from './icons';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -30,6 +30,7 @@ const Sidebar: React.FC<{ activeView: string; setActiveView: (view: string) => v
                     { id: 'dashboard', label: 'Dashboard', icon: <DashboardIcon /> },
                     { id: 'students', label: 'Students', icon: <UsersIcon /> },
                     { id: 'teachers', label: 'Teachers', icon: <UsersIcon /> },
+                    { id: 'defaulters', label: 'Defaulter List', icon: <AlertTriangleIcon /> },
                     { id: 'reports', label: 'Reports', icon: <ChartBarIcon /> },
                 ];
             case Role.TEACHER:
@@ -37,10 +38,12 @@ const Sidebar: React.FC<{ activeView: string; setActiveView: (view: string) => v
                     { id: 'dashboard', label: 'Dashboard', icon: <DashboardIcon /> },
                     { id: 'attendance', label: 'Attendance', icon: <ClipboardListIcon /> },
                     { id: 'marks', label: 'Marks', icon: <BookOpenIcon /> },
+                    { id: 'defaulters', label: 'Defaulters (<75%)', icon: <AlertTriangleIcon /> },
                 ];
             case Role.STUDENT:
                 return [
                     { id: 'dashboard', label: 'Dashboard', icon: <DashboardIcon /> },
+                    { id: 'report-card', label: 'Report Card', icon: <DocumentTextIcon /> },
                 ];
             default:
                 return [];
@@ -80,7 +83,13 @@ const Header: React.FC<{ onMenuClick: () => void }> = ({ onMenuClick }) => {
                     <path d="M4 6H20M4 12H20M4 18H11Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
             </button>
-            <h2 className="text-xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent animate-slideInLeft">Welcome, {user?.name} 👋</h2>
+            <div className="flex items-center gap-3">
+              <h2 className="text-xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent animate-slideInLeft">Welcome, {user?.name} 👋</h2>
+              <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 shadow-sm">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>MongoDB Atlas Live</span>
+              </span>
+            </div>
             <div className="flex items-center space-x-6 animate-slideInRight">
                 <button onClick={toggleTheme} className="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300 hover:scale-110 active:scale-95 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
                     {isDark ? <SunIcon className="w-5 h-5" /> : <MoonIcon className="w-5 h-5" />}

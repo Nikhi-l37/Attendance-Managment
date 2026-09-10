@@ -1,197 +1,193 @@
-
 import { Role, type Student, type Teacher, type User, type AppUser } from '../types';
 
-// In-memory database with localStorage persistence
-interface DB {
-  students: Student[];
-  teachers: Teacher[];
-  admins: User[];
-}
+const API_BASE_URL =
+  (import.meta as any).env?.VITE_API_URL ||
+  ((import.meta as any).env?.DEV ? 'http://localhost:5000/api' : '/api');
 
-const DB_KEY = 'academia-system-db';
-
-const getDb = (): DB => {
-  const dbJson = localStorage.getItem(DB_KEY);
-  if (dbJson) {
-    try {
-      const parsed = JSON.parse(dbJson);
-      // Basic validation
-      if (parsed.students && parsed.teachers && parsed.admins) {
-        return parsed;
-      }
-    } catch (e) {
-      console.error("Failed to parse DB from localStorage", e);
-    }
-  }
-  // Initialize with an empty DB if nothing is in localStorage or if parsing fails
-  const initialDb: DB = {
-    students: [],
-    teachers: [],
-    admins: [],
-  };
-  localStorage.setItem(DB_KEY, JSON.stringify(initialDb));
-  return initialDb;
-};
-
-const saveDb = (db: DB) => {
-  localStorage.setItem(DB_KEY, JSON.stringify(db));
-};
-
-// Mock API functions
+/**
+ * Pure Cloud API Service communicating directly with MongoDB Atlas backend.
+ */
 export const api = {
   adminSignup: async (name: string, email: string): Promise<User> => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            const db = getDb();
-            if (db.admins.some(a => a.email === email) || db.teachers.some(t => t.email === email) || db.students.some(s => s.email === email)) {
-                reject(new Error('An account with this email already exists.'));
-                return;
-            }
-            const newAdmin: User = {
-                id: `a${Date.now()}`,
-                name,
-                email,
-                role: Role.ADMIN,
-            };
-            db.admins.push(newAdmin);
-            saveDb(db);
-            resolve(newAdmin);
-        }, 500);
+    const res = await fetch(`${API_BASE_URL}/auth/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email }),
     });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to sign up admin');
+    }
+    return data;
   },
 
   login: async (email: string, role: Role): Promise<AppUser | null> => {
-    return new Promise((resolve) => {
-        const db = getDb();
-        let user: AppUser | undefined;
-        switch (role) {
-            case Role.ADMIN:
-                user = db.admins.find(u => u.email === email);
-                break;
-            case Role.TEACHER:
-                user = db.teachers.find(u => u.email === email);
-                break;
-            case Role.STUDENT:
-                user = db.students.find(u => u.email === email);
-                break;
-        }
-        setTimeout(() => resolve(user || null), 500);
-    });
+    try {
+      const res = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, role }),
+      });
+      if (!res.ok) {
+        return null;
+      }
+      return await res.json();
+    } catch (err) {
+      console.error('MongoDB Atlas Login failed:', err);
+      return null;
+    }
   },
 
   getStudents: async (): Promise<Student[]> => {
-    return new Promise((resolve) => setTimeout(() => resolve(getDb().students), 500));
+    const res = await fetch(`${API_BASE_URL}/students`);
+    if (!res.ok) throw new Error('Failed to fetch students from MongoDB Atlas');
+    return await res.json();
   },
 
   getTeachers: async (): Promise<Teacher[]> => {
-    return new Promise((resolve) => setTimeout(() => resolve(getDb().teachers), 500));
+    const res = await fetch(`${API_BASE_URL}/teachers`);
+    if (!res.ok) throw new Error('Failed to fetch teachers from MongoDB Atlas');
+    return await res.json();
   },
 
   getStudentById: async (id: string): Promise<Student | null> => {
-     const student = getDb().students.find(s => s.id === id) || null;
-     return new Promise((resolve) => setTimeout(() => resolve(student), 500));
+    try {
+      const res = await fetch(`${API_BASE_URL}/students/${id}`);
+      if (!res.ok) return null;
+      return await res.json();
+    } catch {
+      return null;
+    }
   },
 
   getStudentsByClass: async (className: string): Promise<Student[]> => {
-    const classStudents = getDb().students.filter(s => s.class === className);
-    return new Promise((resolve) => setTimeout(() => resolve(classStudents), 500));
+    const res = await fetch(`${API_BASE_URL}/students?class=${encodeURIComponent(className)}`);
+    if (!res.ok) throw new Error('Failed to fetch class students from MongoDB Atlas');
+    return await res.json();
   },
 
   addStudent: async (studentData: Omit<Student, 'id' | 'role' | 'attendance' | 'marks'>): Promise<Student> => {
-      return new Promise((resolve, reject) => {
-          setTimeout(() => {
-              const db = getDb();
-              if (db.students.some(s => s.email === studentData.email || s.studentId === studentData.studentId)) {
-                  reject(new Error('Student with this email or ID already exists.'));
-                  return;
-              }
-              const newStudent: Student = {
-                  ...studentData,
-                  id: `s${Date.now()}`,
-                  role: Role.STUDENT,
-                  attendance: [],
-                  marks: [],
-              };
-              db.students.push(newStudent);
-              saveDb(db);
-              resolve(newStudent);
-          }, 500);
-      });
+    const res = await fetch(`${API_BASE_URL}/students`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(studentData),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to create student in MongoDB Atlas');
+    }
+    return data;
+  },
+
+  addMultipleStudents: async (
+    studentsData: Omit<Student, 'id' | 'role' | 'attendance' | 'marks'>[]
+  ): Promise<{ added: Student[]; skipped: string[] }> => {
+    const res = await fetch(`${API_BASE_URL}/students/bulk`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ students: studentsData }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to bulk import students to MongoDB Atlas');
+    }
+    return data;
   },
 
   deleteStudent: async (studentId: string): Promise<boolean> => {
-      return new Promise((resolve) => {
-          setTimeout(() => {
-              const db = getDb();
-              const initialLength = db.students.length;
-              db.students = db.students.filter(s => s.id !== studentId);
-              const success = db.students.length < initialLength;
-              if (success) saveDb(db);
-              resolve(success);
-          }, 500);
-      });
+    const res = await fetch(`${API_BASE_URL}/students/${studentId}`, {
+      method: 'DELETE',
+    });
+    return res.ok;
   },
 
   addTeacher: async (teacherData: Omit<Teacher, 'id' | 'role'>): Promise<Teacher> => {
-      return new Promise((resolve, reject) => {
-          setTimeout(() => {
-              const db = getDb();
-               if (db.teachers.some(t => t.email === teacherData.email || t.teacherId === teacherData.teacherId)) {
-                  reject(new Error('Teacher with this email or ID already exists.'));
-                  return;
-              }
-              const newTeacher: Teacher = {
-                  ...teacherData,
-                  id: `t${Date.now()}`,
-                  role: Role.TEACHER,
-              };
-              db.teachers.push(newTeacher);
-              saveDb(db);
-              resolve(newTeacher);
-          }, 500);
-      });
+    const res = await fetch(`${API_BASE_URL}/teachers`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(teacherData),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to create teacher in MongoDB Atlas');
+    }
+    return data;
   },
 
   deleteTeacher: async (teacherId: string): Promise<boolean> => {
-      return new Promise((resolve) => {
-          setTimeout(() => {
-              const db = getDb();
-              const initialLength = db.teachers.length;
-              db.teachers = db.teachers.filter(t => t.id !== teacherId);
-              const success = db.teachers.length < initialLength;
-              if (success) saveDb(db);
-              resolve(success);
-          }, 500);
-      });
+    const res = await fetch(`${API_BASE_URL}/teachers/${teacherId}`, {
+      method: 'DELETE',
+    });
+    return res.ok;
   },
 
-  updateStudentAttendance: async (studentId: string, month: string, status: 'Present' | 'Absent' | 'Late'): Promise<boolean> => {
-      const db = getDb();
-      const student = db.students.find(s => s.id === studentId);
-      if (student) {
-          const record = student.attendance.find(a => a.month === month);
-          if (record) {
-              record.status = status;
-          } else {
-              student.attendance.push({ month, status });
-          }
-          saveDb(db);
-      }
-      return new Promise((resolve) => setTimeout(() => resolve(!!student), 200));
+  updateStudentAttendance: async (
+    studentId: string,
+    dateOrMonth: string,
+    status: 'Present' | 'Absent' | 'Late',
+    dateValue?: string
+  ): Promise<boolean> => {
+    const isDate = Boolean(dateValue || dateOrMonth.includes('-'));
+    const targetDate = isDate ? (dateValue || dateOrMonth) : undefined;
+    const targetMonth = isDate ? new Date(targetDate!).toLocaleString('en-US', { month: 'short' }) : dateOrMonth;
+
+    const res = await fetch(`${API_BASE_URL}/attendance/mark`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        studentId,
+        date: targetDate,
+        month: targetMonth,
+        status,
+      }),
+    });
+    return res.ok;
   },
 
-  updateStudentMarks: async (studentId: string, month: string, subject: string, marks: number): Promise<boolean> => {
-      const db = getDb();
-      const student = db.students.find(s => s.id === studentId);
-      if (student) {
-          const record = student.marks.find(m => m.month === month && m.subject === subject);
-          if (record) {
-              record.marks = marks;
-          } else {
-              student.marks.push({ month, subject, marks });
-          }
-          saveDb(db);
-      }
-      return new Promise((resolve) => setTimeout(() => resolve(!!student), 200));
-  }
+  markAllClassAttendance: async (
+    className: string,
+    dateOrMonth: string,
+    status: 'Present' | 'Absent' | 'Late',
+    dateValue?: string
+  ): Promise<boolean> => {
+    const targetDate = dateValue || dateOrMonth;
+    const res = await fetch(`${API_BASE_URL}/attendance/bulk`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        className,
+        date: targetDate,
+        status,
+      }),
+    });
+    return res.ok;
+  },
+
+  updateStudentMarks: async (
+    studentId: string,
+    month: string,
+    subject: string,
+    marks: number
+  ): Promise<boolean> => {
+    const res = await fetch(`${API_BASE_URL}/marks/update`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        studentId,
+        month,
+        subject,
+        marks,
+      }),
+    });
+    return res.ok;
+  },
+
+  resetToDemoData: async (): Promise<void> => {
+    const res = await fetch(`${API_BASE_URL}/auth/reset`, {
+      method: 'POST',
+    });
+    if (!res.ok) {
+      throw new Error('Failed to reset MongoDB Atlas database');
+    }
+  },
 };

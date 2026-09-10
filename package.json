@@ -6,8 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:render": "npm run build && cd server && npm ci --omit=dev && cd ..",
     "preview": "vite preview",
-    "start": "serve -s dist -l ${PORT:-8080}"
+    "server": "node server/server.js",
+    "seed": "node server/seed.js",
+    "start": "node server/server.js"
   },
   "dependencies": {
     "react": "^19.2.0",

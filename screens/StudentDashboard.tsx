@@ -4,14 +4,16 @@ import { useAuth } from '../hooks/useAuth';
 import { Layout } from '../components/Layout';
 import { DashboardCard } from '../components/DashboardCard';
 import { StudentChart } from '../components/StudentChart';
-import { UsersIcon, BookOpenIcon, ClipboardListIcon } from '../components/icons';
+import { UsersIcon, BookOpenIcon, ClipboardListIcon, PrinterIcon, DocumentTextIcon } from '../components/icons';
 import { api } from '../services/api';
+import { ReportCardModal } from '../components/ReportCardModal';
 
 export const StudentDashboard: React.FC = () => {
     const { user, logout } = useAuth();
     const [studentData, setStudentData] = useState<Student | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [activeView, setActiveView] = React.useState('dashboard');
+    const [activeView, setActiveView] = useState('dashboard');
+    const [showReportCardModal, setShowReportCardModal] = useState(false);
 
     useEffect(() => {
         const fetchStudentData = async () => {
@@ -74,13 +76,44 @@ export const StudentDashboard: React.FC = () => {
 
     return (
         <Layout activeView={activeView} setActiveView={setActiveView}>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6 animate-slideInUp">Student Dashboard</h1>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 animate-slideInUp">
+                <div>
+                    <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Student Dashboard</h1>
+                    <p className="text-slate-500 text-sm mt-1">Roll No: <span className="font-semibold text-indigo-600">{studentData.studentId}</span> • Class: <span className="font-semibold text-indigo-600">{studentData.class}</span></p>
+                </div>
+                <button
+                    type="button"
+                    onClick={() => setShowReportCardModal(true)}
+                    className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold text-sm px-5 py-3 rounded-xl shadow-lg hover:shadow-indigo-500/25 transition-all transform hover:scale-105 active:scale-95"
+                >
+                    <PrinterIcon className="w-5 h-5" />
+                    <span>View & Print Official Report Card</span>
+                </button>
+            </div>
+            
+            {Number(attendanceSummary.percentage) < 75 && (
+                <div className="bg-gradient-to-r from-rose-500 to-red-600 text-white p-5 rounded-2xl shadow-xl mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-slideInUp">
+                    <div className="flex items-center gap-3">
+                        <span className="text-3xl p-2 bg-white/20 rounded-xl">⚠️</span>
+                        <div>
+                            <h3 className="text-lg font-bold">Attendance Warning: Defaulter Risk</h3>
+                            <p className="text-rose-100 text-sm">
+                                Your current attendance is <strong>{attendanceSummary.percentage}%</strong>, which is below the mandatory <strong>75%</strong> requirement. Regular attendance in upcoming lectures is required to avoid detention.
+                            </p>
+                        </div>
+                    </div>
+                    <span className="px-3 py-1 bg-white text-rose-700 font-bold text-xs rounded-full uppercase tracking-wider whitespace-nowrap shadow-sm">
+                        Action Required
+                    </span>
+                </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                  <div className="stagger-1"><DashboardCard 
                     title="Overall Attendance" 
                     value={`${attendanceSummary.percentage}%`} 
                     icon={<ClipboardListIcon className="w-8 h-8 text-white"/>} 
-                    color="bg-gradient-to-r from-green-500 to-green-600" 
+                    color={Number(attendanceSummary.percentage) < 75 ? "bg-gradient-to-r from-rose-500 to-red-600" : "bg-gradient-to-r from-green-500 to-green-600"} 
                 /></div>
                  <div className="stagger-2"><DashboardCard 
                     title="Average Marks" 
@@ -107,14 +140,14 @@ export const StudentDashboard: React.FC = () => {
                         <table className="min-w-full divide-y divide-gray-200">
                             <thead className="bg-gradient-to-r from-indigo-50 to-purple-50 sticky top-0">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Month</th>
+                                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Date / Period</th>
                                     <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Status</th>
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {studentData.attendance.length > 0 ? studentData.attendance.map(record => (
-                                    <tr key={record.month} className="hover:bg-indigo-50 transition-all duration-300 transform hover:scale-[1.01]">
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{record.month}</td>
+                                {studentData.attendance.length > 0 ? studentData.attendance.map((record, idx) => (
+                                    <tr key={record.date || `${record.month}-${idx}`} className="hover:bg-indigo-50 transition-all duration-300 transform hover:scale-[1.01]">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{record.date || record.month}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                                             <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                                                 record.status === 'Present' ? 'bg-green-100 text-green-800' :
@@ -135,6 +168,19 @@ export const StudentDashboard: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Official Report Card Modal */}
+            {(showReportCardModal || activeView === 'report-card') && (
+                <ReportCardModal
+                    student={studentData}
+                    onClose={() => {
+                        setShowReportCardModal(false);
+                        if (activeView === 'report-card') {
+                            setActiveView('dashboard');
+                        }
+                    }}
+                />
+            )}
         </Layout>
     );
-};
+};
