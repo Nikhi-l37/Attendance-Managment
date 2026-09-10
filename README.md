@@ -49,21 +49,26 @@ A full-stack, cloud-powered academic management web application engineered to di
 ## 🛠️ Project Structure
 
 ```
-├── components/            # Reusable UI components (Layout, Defaulters, ReportCard, etc.)
-├── context/               # Authentication & Theme state contexts
-├── hooks/                 # Custom React hooks (useAuth, useTheme)
-├── screens/               # Role dashboard screens (Admin, Teacher, Student, Login)
-├── server/                # Node.js + Express REST API
+├── src/                   # Frontend Application (React 19 + TypeScript + Vite)
+│   ├── components/        # Reusable UI components (Layout, Defaulters, ReportCard, etc.)
+│   ├── context/           # Authentication & Theme state contexts
+│   ├── hooks/             # Custom React hooks (useAuth, useTheme)
+│   ├── screens/           # Role dashboard screens (Admin, Teacher, Student, Login)
+│   ├── services/          # API client, CSV utilities, Grading & Attendance engines
+│   ├── App.tsx            # Main application component & routing
+│   ├── index.tsx          # React DOM entry point
+│   └── types.ts           # Core TypeScript definitions
+├── server/                # Backend API Server (Node.js + Express + MongoDB Atlas)
 │   ├── config/            # MongoDB Atlas connection manager with DNS resolver
 │   ├── models/            # Mongoose Schemas (User, Student, Teacher)
 │   ├── routes/            # API Route handlers (auth, students, teachers, attendance, marks)
 │   ├── seed.js            # Database seeder script
-│   └── server.js          # Express app entry point
-├── services/              # API client, CSV utilities, Grading & Attendance engines
-├── App.tsx                # Main application component & routing
+│   ├── server.js          # Express app entry point
+│   └── package.json       # Backend dependencies
 ├── index.html             # Application HTML & print stylesheets
-├── index.tsx              # React DOM entry point
-└── types.ts               # Core TypeScript definitions
+├── Dockerfile             # Multi-stage production container for Render
+├── render.yaml            # Render Blueprint configuration
+└── package.json           # Root scripts (dev, build, server, seed)
 ```
 
 ---
