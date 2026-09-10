@@ -49,21 +49,26 @@ A full-stack, cloud-powered academic management web application engineered to di
 ## 🛠️ Project Structure
 
 ```
-├── components/            # Reusable UI components (Layout, Defaulters, ReportCard, etc.)
-├── context/               # Authentication & Theme state contexts
-├── hooks/                 # Custom React hooks (useAuth, useTheme)
-├── screens/               # Role dashboard screens (Admin, Teacher, Student, Login)
-├── server/                # Node.js + Express REST API
+├── src/                   # Frontend Application (React 19 + TypeScript + Vite)
+│   ├── components/        # Reusable UI components (Layout, Defaulters, ReportCard, etc.)
+│   ├── context/           # Authentication & Theme state contexts
+│   ├── hooks/             # Custom React hooks (useAuth, useTheme)
+│   ├── screens/           # Role dashboard screens (Admin, Teacher, Student, Login)
+│   ├── services/          # API client, CSV utilities, Grading & Attendance engines
+│   ├── App.tsx            # Main application component & routing
+│   ├── index.tsx          # React DOM entry point
+│   └── types.ts           # Core TypeScript definitions
+├── server/                # Backend API Server (Node.js + Express + MongoDB Atlas)
 │   ├── config/            # MongoDB Atlas connection manager with DNS resolver
 │   ├── models/            # Mongoose Schemas (User, Student, Teacher)
 │   ├── routes/            # API Route handlers (auth, students, teachers, attendance, marks)
 │   ├── seed.js            # Database seeder script
-│   └── server.js          # Express app entry point
-├── services/              # API client, CSV utilities, Grading & Attendance engines
-├── App.tsx                # Main application component & routing
+│   ├── server.js          # Express app entry point
+│   ├── package.json       # Backend dependencies
+│   └── Dockerfile         # Multi-stage production container for Render
 ├── index.html             # Application HTML & print stylesheets
-├── index.tsx              # React DOM entry point
-└── types.ts               # Core TypeScript definitions
+├── render.yaml            # Render Blueprint configuration
+└── package.json           # Root scripts (dev, build, server, seed)
 ```
 
 ---
@@ -125,11 +130,15 @@ This application is engineered to deploy seamlessly to [Render](https://render.c
 1. Push this repository to **GitHub**.
 2. Go to [Render Dashboard](https://dashboard.render.com/) → **New** → **Web Service**.
 3. Select your GitHub repository.
-4. Set **Environment / Runtime** to **Docker** (Render will automatically detect [`Dockerfile`](Dockerfile)).
-5. Under **Environment Variables**, add:
+4. Set **Environment / Runtime** to **Docker**.
+5. Set **Docker Command / Context**:
+   - **Docker Build Context Directory**: `.`
+   - **Dockerfile Path**: `server/Dockerfile`
+   *(Render will also configure this automatically if using Blueprints via `render.yaml`)*
+6. Under **Environment Variables**, add:
    - `MONGODB_URI`: `mongodb+srv://sivadanikhilreddy_db_user:6VaiAjdq3O9Jj8Py@attendance.iglhxxh.mongodb.net/attendance_db?retryWrites=true&w=majority&appName=attendance`
    - `NODE_ENV`: `production`
-6. Click **Deploy Web Service**!
+7. Click **Deploy Web Service**!
 
 ### Option B: Deploy as Native Node Web Service
 1. In Render Dashboard → **New** → **Web Service**.
