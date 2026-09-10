@@ -166,6 +166,43 @@
       .gradient-border:hover::before {
         opacity: 1;
       }
+
+      /* Print styles for Student Report Card */
+      @media print {
+        body {
+          background: white !important;
+          color: black !important;
+        }
+        body * {
+          visibility: hidden !important;
+        }
+        #printable-report-card,
+        #printable-report-card * {
+          visibility: visible !important;
+        }
+        #printable-report-card {
+          position: absolute !important;
+          left: 0 !important;
+          top: 0 !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          margin: 0 !important;
+          padding: 15px !important;
+          box-shadow: none !important;
+          border: 2px solid #1e293b !important;
+          background: white !important;
+          color: #0f172a !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+        .no-print {
+          display: none !important;
+        }
+        @page {
+          size: A4 portrait;
+          margin: 10mm;
+        }
+      }
     </style>
 </head>
   <body class="bg-slate-100">

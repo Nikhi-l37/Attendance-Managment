@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { Role } from '../types';
 import { ChevronDownIcon } from '../components/icons';
+import { api } from '../services/api';
 
 export const LoginScreen: React.FC = () => {
   const [isSignup, setIsSignup] = useState(false);
@@ -23,6 +24,30 @@ export const LoginScreen: React.FC = () => {
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred.');
+    }
+  };
+
+  const handleDemoLogin = async (demoEmail: string, demoRole: Role) => {
+    setEmail(demoEmail);
+    setRole(demoRole);
+    setIsSignup(false);
+    setError('');
+    try {
+      await login(demoEmail, demoRole);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Demo login failed.');
+    }
+  };
+
+  const handleResetDemoData = async () => {
+    if (window.confirm('Reset demo database to default teachers, students, and sample grades?')) {
+      try {
+        await api.resetToDemoData();
+        setError('');
+        alert('Database successfully reset to default demo records!');
+      } catch (err) {
+        setError('Failed to reset demo data.');
+      }
     }
   };
 
@@ -116,10 +141,59 @@ export const LoginScreen: React.FC = () => {
                 </button>
              </p>
          </div>
-         <div className="mt-6 text-center text-sm bg-indigo-50 border border-indigo-100 rounded-lg p-4">
-            <p className="font-semibold text-indigo-900 mb-2">📋 Instructions:</p>
-            <p className="text-slate-700 mb-1">1. First-time admin? Use 'Sign Up'.</p>
-            <p className="text-slate-700">2. Students & Teachers must be added by an admin before they can sign in.</p>
+
+        {/* Quick Demo Logins */}
+        <div className="mt-6 pt-5 border-t border-slate-200">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              ⚡ Quick Demo Access
+            </span>
+            <button
+              type="button"
+              onClick={handleResetDemoData}
+              title="Reset database to initial demo values"
+              className="text-xs text-indigo-600 hover:underline font-medium"
+            >
+              Reset Demo Data
+            </button>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              onClick={() => handleDemoLogin('admin@academia.edu', Role.ADMIN)}
+              disabled={loading}
+              className="flex flex-col items-center justify-center p-2.5 rounded-xl border border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 transition-all hover:scale-105 active:scale-95 shadow-sm text-xs font-medium"
+            >
+              <span className="text-lg mb-0.5">👑</span>
+              <span className="font-semibold">Admin</span>
+              <span className="text-[10px] text-slate-500">Full Access</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleDemoLogin('sarah.teacher@academia.edu', Role.TEACHER)}
+              disabled={loading}
+              className="flex flex-col items-center justify-center p-2.5 rounded-xl border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-100 text-emerald-900 transition-all hover:scale-105 active:scale-95 shadow-sm text-xs font-medium"
+            >
+              <span className="text-lg mb-0.5">👨‍🏫</span>
+              <span className="font-semibold">Teacher</span>
+              <span className="text-[10px] text-slate-500">Prof. Sarah</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleDemoLogin('alex.student@academia.edu', Role.STUDENT)}
+              disabled={loading}
+              className="flex flex-col items-center justify-center p-2.5 rounded-xl border border-purple-200 bg-purple-50/70 hover:bg-purple-100 text-purple-900 transition-all hover:scale-105 active:scale-95 shadow-sm text-xs font-medium"
+            >
+              <span className="text-lg mb-0.5">🎓</span>
+              <span className="font-semibold">Student</span>
+              <span className="text-[10px] text-slate-500">Alex Morgan</span>
+            </button>
+          </div>
+        </div>
+
+         <div className="mt-4 text-center text-sm bg-indigo-50 border border-indigo-100 rounded-lg p-3">
+            <p className="font-semibold text-indigo-900 mb-1 text-xs">📋 Tip:</p>
+            <p className="text-slate-600 text-xs">Click any demo button above for instant 1-click preview without entering emails manually.</p>
         </div>
       </div>
     </div>

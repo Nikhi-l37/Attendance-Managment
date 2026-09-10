@@ -13,6 +13,7 @@ export interface User {
 }
 
 export interface AttendanceRecord {
+  date?: string; // YYYY-MM-DD or date label
   month: string;
   status: 'Present' | 'Absent' | 'Late';
 }
